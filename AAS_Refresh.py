@@ -58,20 +58,19 @@ def defaultDBRefresh(url,headers):
 # Mode 3: Table Refresh
 def tableRefresh(url,headers,tables):
   objects = []
-  if str(type(tables[0])) == "<class 'str'>":
-    for table in tables:
-      item = {"table":table}
-      objects.append(item)
-  elif str(type(tables[0])) == "<class 'dict'>":
-    for dict in tables:
-      item = {"table":list(dict.keys())[0], "partition": list(dict.values())[0]}
-      objects.append(item)
-  body = {
-      "Type": "Full",
-      "CommitMode": "transactional",
-      "MaxParallelism": 2,
-      "RetryCount": 2
-  }
+  for table in tables:
+        if str(type(table)) == "<class 'str'>":
+            item = {"table":table}
+            objects.append(item)
+        elif str(type(table)) == "<class 'dict'>":  
+            item = {"table":list(table.keys())[0], "partition": list(table.values())[0]}
+            objects.append(item)
+        body = {
+              "Type": "Full",
+              "CommitMode": "transactional",
+              "MaxParallelism": 2,
+              "RetryCount": 2
+        }
   body["Objects"] = objects
   post_req = requests.post(url,json=body,headers=headers)
   return post_req
