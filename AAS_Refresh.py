@@ -98,7 +98,7 @@ def loggerModule(resp,authHeaders,interval=30,server="",model=""):
         print(str(datetime.datetime.now()) + ": Refresh in progress")
         time.sleep(interval)
       elif (status_chk.json()['status'].lower() == "failed"):
-        newRow = spark.createDataFrame([(datetime.datetime.now(),server,model,f"Model {model} failed, URL: {url}","N")], schema)
+        newRow = spark.createDataFrame([(datetime.datetime.now(),server,model,f"Model {model} failed, URL: {url}, Failure Message: {status_chk.json()['messages'][0]['message']}","N")], schema)
         df_log = df_log.union(newRow)
         print(str(datetime.datetime.now()) +": Refresh failed!")
         break
